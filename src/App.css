@@ -41,6 +41,7 @@ button:focus {
 }
 
 #timer-label {
+  margin-bottom: 1rem;
   font-size: 4rem;
   font-weight: 300;
 }
