@@ -1,32 +1,97 @@
-.App {
+body {
+  background: #505355;
+  font-family: 'Roboto', sans-serif;
   text-align: center;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
+button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #f1f1f1;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+button:focus {
+  outline: none;
+}
+
+#root {
+  max-width: 1024px;
+  margin: 0 auto;
+  color: #dddddd;
+}
+
+#length-controls {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.length-control {
+  text-align: center;
+  padding: 0 3rem;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.length-control h3 {
+  font-size: 2rem;
+  font-weight: 300;
+}
+
+.timer, .controls {
+  text-align: center;
+}
+
+#timer-label {
+  font-size: 4rem;
+  font-weight: 300;
+}
+
+#time-left {
+  font-size: 12rem;
+  font-family: 'Orbitron', sans-serif;
+}
+
+.length-controls-inner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.length-controls-inner button {
+  font-size: 2rem;
+}
+
+.length-controls-inner button[disabled] {
+  opacity: .3;
+}
+
+.length-controls-inner input {
+  background-color: transparent;
+  display: inline-block;
+  width: 2rem;
+  text-align: center;
+  border: none;
+  color: #dddddd;
+}
+
+.length-controls-inner input:focus,
+.length-controls-inner input:active {
+  outline: none;
+}
+
+.length-controls-inner .value {
+  padding: 0 1rem;
+  font-size: 1.5rem;
+}
+
+#start_stop, #reset {
+  font-size: 5rem;
+}
+
+@media all and (max-width: 768px) {
+  html {
+    font-size: 80%;
   }
-  to {
-    transform: rotate(360deg);
+  #time-left {
+    font-size: 8rem;
   }
 }

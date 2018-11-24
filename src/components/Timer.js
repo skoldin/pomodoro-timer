@@ -100,7 +100,7 @@ class Timer extends React.Component {
     return (
       <div className={'timer'}>
         <h3 id={"timer-label"}>{ (this.state.isBreak) ? 'Break' : 'Session' }</h3>
-        <div id="time-left">{this.formatTime()}</div>
+        <div id="time-left" style={(this.state.timeLeft < 60000) ? {color: '#980000'} : {}}>{this.formatTime()}</div>
         <audio src="gong.wav" id="beep"></audio>
       </div>
     )

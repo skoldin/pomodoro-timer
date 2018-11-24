@@ -41,26 +41,6 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <LengthControl value={this.state.breakLength}
-                       elemId={"break-length"}
-                       label={"Break Length"}
-                       labelId={"break-label"}
-                       decrementId={"break-decrement"}
-                       incrementId={"break-increment"}
-                       prop='breakLength'
-                       updateAppState={this.updateAppState}
-                       disabled={this.state.running}
-        />
-        <LengthControl value={this.state.sessionLength}
-                       elemId={"session-length"}
-                       label={"Session Length"}
-                       labelId={"session-label"}
-                       decrementId={"session-decrement"}
-                       incrementId={"session-increment"}
-                       prop='sessionLength'
-                       updateAppState={this.updateAppState}
-                       disabled={this.state.running}
-        />
         <Timer sessionLength={this.state.sessionLength}
                breakLength={this.state.breakLength}
                running={this.state.running}
@@ -72,6 +52,28 @@ class App extends Component {
                   updateAppState={this.updateAppState}
                   reset={this.reset}
         />
+        <div id="length-controls">
+          <LengthControl value={this.state.breakLength}
+                         elemId={"break-length"}
+                         label={"Break Length"}
+                         labelId={"break-label"}
+                         decrementId={"break-decrement"}
+                         incrementId={"break-increment"}
+                         prop='breakLength'
+                         updateAppState={this.updateAppState}
+                         disabled={this.state.running}
+          />
+          <LengthControl value={this.state.sessionLength}
+                         elemId={"session-length"}
+                         label={"Session Length"}
+                         labelId={"session-label"}
+                         decrementId={"session-decrement"}
+                         incrementId={"session-increment"}
+                         prop='sessionLength'
+                         updateAppState={this.updateAppState}
+                         disabled={this.state.running}
+          />
+        </div>
       </div>
     );
   }

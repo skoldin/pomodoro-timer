@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 
 class LengthControl extends React.Component {
   constructor(props) {
@@ -15,6 +15,7 @@ class LengthControl extends React.Component {
 
     this.decrementHandle = this.decrementHandle.bind(this);
     this.incrementHandle = this.incrementHandle.bind(this);
+    this.changeHandle = this.changeHandle.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -23,6 +24,24 @@ class LengthControl extends React.Component {
         value: nextProps.value
       })
     }
+  }
+
+  changeHandle(e) {
+    let newValue = +e.target.value;
+
+    if (newValue >= this.state.maxValue) {
+      newValue = this.state.maxValue;
+    } else if (newValue <= this.state.minValue) {
+      newValue = this.state.minValue;
+    }
+
+    this.setState((prevState) => {
+      this.props.updateAppState(this.props.prop, newValue);
+
+      return {
+        value: newValue
+      }
+    });
   }
 
   incrementHandle() {
@@ -55,12 +74,12 @@ class LengthControl extends React.Component {
     return (
       <div className={"length-control"}>
         <h3 id={this.props.labelId}>{this.props.label}</h3>
-        <div className="controls">
+        <div className="length-controls-inner">
+          <button id={this.props.decrementId} onClick={this.decrementHandle} disabled={this.props.disabled} ><FontAwesomeIcon
+            icon={faChevronLeft}/></button>
+          <input className="value" id={this.props.elemId} value={this.state.value} onChange={this.changeHandle}/>
           <button id={this.props.incrementId} onClick={this.incrementHandle} disabled={this.props.disabled}><FontAwesomeIcon
-            icon={faChevronUp}/></button>
-          <div className="value" id={this.props.elemId}>{this.state.value}</div>
-          <button id={this.props.decrementId} onClick={this.decrementHandle} disabled={this.props.disabled}><FontAwesomeIcon
-            icon={faChevronDown}/></button>
+            icon={faChevronRight}/></button>
         </div>
       </div>
     );
