@@ -61,7 +61,6 @@ class App extends Component {
                          incrementId={"break-increment"}
                          prop='breakLength'
                          updateAppState={this.updateAppState}
-                         disabled={this.state.running}
           />
           <LengthControl value={this.state.sessionLength}
                          elemId={"session-length"}
@@ -71,7 +70,6 @@ class App extends Component {
                          incrementId={"session-increment"}
                          prop='sessionLength'
                          updateAppState={this.updateAppState}
-                         disabled={this.state.running}
           />
         </div>
       </div>
