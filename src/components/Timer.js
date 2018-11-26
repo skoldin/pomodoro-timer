@@ -28,7 +28,7 @@ class Timer extends React.Component {
     if (running && ! this.timer) {
       this.timer = setInterval(() => {
         this.tick();
-      }, 100)
+      }, 1000)
     } else if ( ! running ) {
       this.resetTimer();
     }
