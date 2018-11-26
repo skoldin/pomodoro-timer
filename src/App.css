@@ -11,7 +11,8 @@ button {
   color: #f1f1f1;
 }
 
-button:focus {
+button:focus,
+button:active {
   outline: none;
 }
 

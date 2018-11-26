@@ -3,6 +3,7 @@ import './App.css';
 import LengthControl from "./components/LengthControl";
 import Timer from './components/Timer';
 import Controls from './components/Controls';
+import { Helmet } from 'react-helmet';
 
 class App extends Component {
   constructor(props) {

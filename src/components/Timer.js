@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Helmet } from 'react-helmet';
 
 class Timer extends React.Component {
   constructor(props) {
@@ -27,7 +28,7 @@ class Timer extends React.Component {
     if (running && ! this.timer) {
       this.timer = setInterval(() => {
         this.tick();
-      }, 1000)
+      }, 100)
     } else if ( ! running ) {
       this.resetTimer();
     }
@@ -97,8 +98,20 @@ class Timer extends React.Component {
   }
 
   render() {
+    let favicon = '/favicon.ico';
+
+    if (this.props.running && this.state.isBreak) {
+      favicon = '/favicon-break.ico';
+    } else if (this.props.running) {
+      favicon = '/favicon-session.ico';
+    }
+
     return (
       <div className={'timer'}>
+        <Helmet defer={false}>
+          <link rel="shortcut icon" href={favicon}/>
+          <title>{(this.props.running) ? `${this.formatTime(this.state.timeLeft)} | Pomodoro Timer` : 'Pomodoro Timer'}</title>
+        </Helmet>
         <h3 id={"timer-label"}>{ (this.state.isBreak) ? 'Break' : 'Session' }</h3>
         <div id="time-left" style={(this.state.timeLeft < 60000) ? {color: '#980000'} : {}}>{this.formatTime()}</div>
         <audio src="gong.wav" id="beep"></audio>
