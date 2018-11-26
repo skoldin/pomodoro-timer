@@ -75,10 +75,10 @@ class LengthControl extends React.Component {
       <div className={"length-control"}>
         <h3 id={this.props.labelId}>{this.props.label}</h3>
         <div className="length-controls-inner">
-          <button id={this.props.decrementId} onClick={this.decrementHandle} ><FontAwesomeIcon
+          <button title={"You can click the number to edit"} id={this.props.decrementId} onClick={this.decrementHandle} ><FontAwesomeIcon
             icon={faChevronLeft}/></button>
           <input className="value" id={this.props.elemId} value={this.state.value} onChange={this.changeHandle}/>
-          <button id={this.props.incrementId} onClick={this.incrementHandle}><FontAwesomeIcon
+          <button title={"You can click the number to edit"} id={this.props.incrementId} onClick={this.incrementHandle}><FontAwesomeIcon
             icon={faChevronRight}/></button>
         </div>
       </div>

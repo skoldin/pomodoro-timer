@@ -98,19 +98,22 @@ class Timer extends React.Component {
   }
 
   render() {
-    let favicon = '/favicon.ico';
+    let favicon = '/favicon.ico',
+      title = 'Pomodoro Timer';
 
     if (this.props.running && this.state.isBreak) {
+      title = this.formatTime(this.state.timeLeft) + ' | Break | ' + title;
       favicon = '/favicon-break.ico';
     } else if (this.props.running) {
+      title = this.formatTime(this.state.timeLeft) + ' | Session | ' + title;
       favicon = '/favicon-session.ico';
     }
 
     return (
       <div className={'timer'}>
         <Helmet defer={false}>
-          <link rel="shortcut icon" href={favicon}/>
-          <title>{(this.props.running) ? `${this.formatTime(this.state.timeLeft)} | Pomodoro Timer` : 'Pomodoro Timer'}</title>
+          <link rel="shortcut icon" href={favicon + '?v=3'}/>
+          <title>{title}</title>
         </Helmet>
         <h3 id={"timer-label"}>{ (this.state.isBreak) ? 'Break' : 'Session' }</h3>
         <div id="time-left" style={(this.state.timeLeft < 60000) ? {color: '#980000'} : {}}>{this.formatTime()}</div>
