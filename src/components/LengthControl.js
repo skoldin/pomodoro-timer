@@ -88,7 +88,6 @@ class LengthControl extends React.Component {
 
 LengthControl.propTypes = {
   elemId: PropTypes.string.isRequired,
-  disabled: PropTypes.bool.isRequired,
   prop: PropTypes.string.isRequired,
   value: PropTypes.number.isRequired,
   label: PropTypes.string.isRequired,

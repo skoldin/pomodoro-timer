@@ -21,7 +21,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "heroku-postbuild": "npm run build"
+    "heroku-postbuild": "npm run build",
+    "check-coverage": "react-scripts test --env=jsdom --coverage"
   },
   "eslintConfig": {
     "extends": "react-app"
