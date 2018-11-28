@@ -29,7 +29,6 @@ class App extends Component {
   }
 
   updateAppState(prop, val) {
-    console.log('Update ' + prop + ' to ' + val);
     this.setState({
       [prop]: val
     });

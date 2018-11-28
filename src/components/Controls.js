@@ -36,6 +36,7 @@ class Controls extends React.Component {
       running: false
     });
 
+    this.props.updateAppState('running', false);
     sessionStorage.setItem('running', 'false');
   }
 
