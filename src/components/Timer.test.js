@@ -72,7 +72,7 @@ describe('Timer', () => {
   it('Reset', () => {
     const wrapper = setup();
     const defaultTime = wrapper.instance().defaultTime;
-    console.log(defaultTime);
+
     wrapper.instance().isBreak = true;
     wrapper.setProps({ reset: true });
 
@@ -82,6 +82,9 @@ describe('Timer', () => {
     expect(wrapper.props().updateAppState.mock.calls.length).toBe(1);
     expect(wrapper.props().updateAppState.mock.calls[0][0]).toBe('reset');
     expect(wrapper.props().updateAppState.mock.calls[0][1]).toBe(false);
+
+    expect(sessionStorage.getItem('running')).toBeNull();
+    expect(sessionStorage.getItem('timeLeft')).toBeNull();
   });
   it('Change session length', () => {
     const wrapper = setup();
@@ -95,6 +98,7 @@ describe('Timer', () => {
     wrapper.setProps({ running: true });
 
     expect(spy).toHaveBeenCalledWith(true);
+    expect(sessionStorage.getItem('running')).toBe('true');
   });
   it('Timeout clears on unmomunt', () => {
     const wrapper = setup();

@@ -25,14 +25,17 @@ describe('Controls', () => {
     expect(wrapper.find('#reset').length).toBe(1);
   });
 
-  it('State toggles', () => {
+  it('State and local storage values toggle', () => {
     const wrapper = setup();
 
     expect(wrapper.state('running')).toBe(false);
+    expect(sessionStorage.getItem('running')).toBeNull();
     wrapper.find('#start_stop').simulate('click');
     expect(wrapper.state('running')).toBe(true);
+    expect(sessionStorage.getItem('running')).toBe('true');
     wrapper.find('#start_stop').simulate('click');
     expect(wrapper.state('running')).toBe(false);
+    expect(sessionStorage.getItem('running')).toBe('false');
   });
   it('Calls reset and stops running on reset', () => {
     const wrapper = setup(true);
@@ -41,5 +44,6 @@ describe('Controls', () => {
 
     expect(wrapper.props().reset.mock.calls.length).toBe(1);
     expect(wrapper.state().running).toBe(false);
+    expect(sessionStorage.getItem('running')).toBe('false');
   })
 });

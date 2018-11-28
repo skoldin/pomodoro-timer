@@ -4,6 +4,7 @@ import LengthControl from "./components/LengthControl";
 import Timer from './components/Timer';
 import Controls from './components/Controls';
 import { Helmet } from 'react-helmet';
+import storageHelper from './storageHelper';
 
 class App extends Component {
   constructor(props) {
@@ -18,11 +19,17 @@ class App extends Component {
     };
 
     this.state = this.defaultState;
+
+    // init stored data
+    this.state.running = storageHelper.getBool('running')
+    this.state.isBreak = storageHelper.getBool('isBreak')
+
     this.updateAppState = this.updateAppState.bind(this);
     this.reset = this.reset.bind(this);
   }
 
   updateAppState(prop, val) {
+    console.log('Update ' + prop + ' to ' + val);
     this.setState({
       [prop]: val
     });
@@ -35,6 +42,10 @@ class App extends Component {
     sound.currentTime = 0;
 
     this.defaultState.reset = true;
+
+    sessionStorage.removeItem('timeLeft');
+    sessionStorage.removeItem('running');
+    sessionStorage.removeItem('isBreak');
 
     this.setState(this.defaultState);
   }

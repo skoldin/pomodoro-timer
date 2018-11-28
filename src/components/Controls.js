@@ -2,13 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faPause, faSync } from '@fortawesome/free-solid-svg-icons';
+import storageHelper from '../storageHelper';
 
 class Controls extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      running: this.props.running
+      running: storageHelper.getBool('running') || this.props.running
     };
 
     this.toggleRun = this.toggleRun.bind(this);
@@ -17,10 +18,13 @@ class Controls extends React.Component {
 
   toggleRun() {
     this.setState((prevState) => {
-      this.props.updateAppState('running', ! prevState.running);
+      const running = ! prevState.running;
+
+      sessionStorage.setItem('running', running.toString());
+      this.props.updateAppState('running', running);
 
       return {
-        running: ! prevState.running
+        running
       }
     });
   }
@@ -30,7 +34,9 @@ class Controls extends React.Component {
 
     this.setState({
       running: false
-    })
+    });
+
+    sessionStorage.setItem('running', 'false');
   }
 
 	render() {

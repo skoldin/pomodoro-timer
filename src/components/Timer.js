@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
+import storageHelper from '../storageHelper';
 
 class Timer extends React.Component {
   constructor(props) {
@@ -8,20 +9,20 @@ class Timer extends React.Component {
 
     this.msInSec = 1000;
     this.msInMin = 60 * this.msInSec;
-    this.defaultTime = this.msInMin * this.props.sessionLength;
+    this.defaultTime =  this.msInMin * this.props.sessionLength;
     this.timer = null;
 
     this.state = {
-      running: props.running,
-      isBreak: props.isBreak,
-      timeLeft: this.defaultTime
+      running: storageHelper.getBool('running') || props.running,
+      isBreak: storageHelper.getBool('isBreak') || props.isBreak,
+      timeLeft: sessionStorage.getItem('timeLeft') || this.defaultTime
     };
   }
 
   resetTimer() {
     clearInterval(this.timer);
 
-    this.timer = null
+    this.timer = null;
   }
 
   toggleStartStop(running) {
@@ -32,6 +33,10 @@ class Timer extends React.Component {
     } else if ( ! running ) {
       this.resetTimer();
     }
+  }
+
+  componentWillMount() {
+    this.toggleStartStop(this.state.running);
   }
 
   componentWillReceiveProps(next) {
@@ -52,6 +57,7 @@ class Timer extends React.Component {
 
     if (this.props.running !== next.running) {
       this.toggleStartStop(next.running);
+      sessionStorage.setItem('running', next.running);
     }
   }
 
@@ -89,6 +95,10 @@ class Timer extends React.Component {
           isBreak = false;
         }
       }
+
+      // update session storage
+      sessionStorage.setItem('timeLeft', newTime);
+      sessionStorage.setItem('isBreak', isBreak);
 
       return {
         timeLeft: newTime,
