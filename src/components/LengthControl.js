@@ -2,16 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { connect } from 'react-redux';
+import { setSessionLength, setBreakLength } from '../actions/lengthActions';
 
-class LengthControl extends React.Component {
+export class LengthControl extends React.Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      maxValue: 60,
-      minValue: 1,
-      value: this.props.value
-    };
 
     this.decrementHandle = this.decrementHandle.bind(this);
     this.incrementHandle = this.incrementHandle.bind(this);
@@ -27,47 +23,15 @@ class LengthControl extends React.Component {
   }
 
   changeHandle(e) {
-    let newValue = +e.target.value;
-
-    if (newValue >= this.state.maxValue) {
-      newValue = this.state.maxValue;
-    } else if (newValue <= this.state.minValue) {
-      newValue = this.state.minValue;
-    }
-
-    this.setState((prevState) => {
-      this.props.updateAppState(this.props.prop, newValue);
-
-      return {
-        value: newValue
-      }
-    });
+    this.props.setLength(e.target.value);
   }
 
   incrementHandle() {
-    this.setState((prevState) => {
-      const newValue = (prevState.value >= this.state.maxValue) ?
-        this.state.maxValue : prevState.value += 1;
-
-      this.props.updateAppState(this.props.prop, newValue);
-
-      return {
-        value: newValue
-      }
-    });
+    this.props.setLength(this.props.timeLength + 1);
   }
 
   decrementHandle() {
-    this.setState((prevState) => {
-      const newValue = (prevState.value <= this.state.minValue) ?
-        this.state.minValue : prevState.value -= 1;
-
-      this.props.updateAppState(this.props.prop, newValue);
-
-      return {
-        value: newValue
-      }
-    });
+    this.props.setLength(this.props.timeLength -1);
   }
 
   render() {
@@ -77,7 +41,10 @@ class LengthControl extends React.Component {
         <div className="length-controls-inner">
           <button title={"You can click the number to edit"} id={this.props.decrementId} onClick={this.decrementHandle} ><FontAwesomeIcon
             icon={faChevronLeft}/></button>
-          <input className="value" id={this.props.elemId} value={this.state.value} onChange={this.changeHandle}/>
+          <input className="value"
+                 id={this.props.elemId}
+                 value={this.props.timeLength}
+                 onChange={this.changeHandle}/>
           <button title={"You can click the number to edit"} id={this.props.incrementId} onClick={this.incrementHandle}><FontAwesomeIcon
             icon={faChevronRight}/></button>
         </div>
@@ -88,13 +55,27 @@ class LengthControl extends React.Component {
 
 LengthControl.propTypes = {
   elemId: PropTypes.string.isRequired,
-  prop: PropTypes.string.isRequired,
-  value: PropTypes.number.isRequired,
+  type: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
   labelId: PropTypes.string.isRequired,
   decrementId: PropTypes.string.isRequired,
   incrementId: PropTypes.string.isRequired,
-  updateAppState: PropTypes.func.isRequired
 };
 
-export default LengthControl;
+function mapStateToProps(state, ownProps) {
+  return {
+    timeLength: (ownProps.type === 'session') ? state.sessionLength : state.breakLength
+  }
+}
+
+function mapDispatchToProps(dispatch, ownProps) {
+  const setLength = (ownProps.type === 'session') ? setSessionLength : setBreakLength;
+
+  return {
+    setLength: (length) => {
+      dispatch(setLength(length));
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LengthControl);

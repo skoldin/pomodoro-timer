@@ -2,49 +2,46 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faPause, faSync } from '@fortawesome/free-solid-svg-icons';
+import { connect } from 'react-redux';
 import storageHelper from '../storageHelper';
+import { startTimer, stopTimer, reset } from '../actions/controlsActions';
 
-class Controls extends React.Component {
+export class Controls extends React.Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      running: storageHelper.getBool('running') || this.props.running
-    };
 
     this.toggleRun = this.toggleRun.bind(this);
     this.reset = this.reset.bind(this);
   }
 
   toggleRun() {
-    this.setState((prevState) => {
-      const running = ! prevState.running;
-
-      sessionStorage.setItem('running', running.toString());
-      this.props.updateAppState('running', running);
-
-      return {
-        running
-      }
-    });
+    if (this.props.running) {
+      this.props.stopTimer();
+      sessionStorage.removeItem('running');
+    } else {
+      this.props.startTimer();
+      storageHelper.setBool('running', true);
+    }
   }
 
   reset() {
     this.props.reset();
 
-    this.setState({
-      running: false
-    });
+    const sound = document.getElementById('beep');
 
-    this.props.updateAppState('running', false);
-    sessionStorage.setItem('running', 'false');
+    if (sound) {
+      sound.pause();
+      sound.currentTime = 0;
+    }
+
+    sessionStorage.clear();
   }
 
 	render() {
     return (
       <div className={'controls'}>
         <button id="start_stop" onClick={this.toggleRun}>
-          <FontAwesomeIcon icon={(this.state.running) ? faPause : faPlay}/>
+          <FontAwesomeIcon icon={(this.props.running) ? faPause : faPlay}/>
         </button>
         <button id="reset" onClick={this.reset}>
           <FontAwesomeIcon icon={faSync}/>
@@ -56,8 +53,27 @@ class Controls extends React.Component {
 
 Controls.propTypes = {
   running: PropTypes.bool.isRequired,
-  updateAppState: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired
 };
 
-export default Controls;
+function mapStateToProps( state ) {
+  return {
+    running: state.running
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    startTimer: () => {
+      dispatch(startTimer());
+    },
+    stopTimer: () => {
+      dispatch(stopTimer());
+    },
+    reset: () => {
+      dispatch(reset());
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Controls);

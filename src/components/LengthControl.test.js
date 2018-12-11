@@ -1,22 +1,37 @@
 import { mount, shallow } from 'enzyme';
 import LengthControl from './LengthControl';
 import React from 'react';
+import initialState from '../reducers/initialState';
 
-function setup(value = 5) {
+import rootReducer from '../reducers';
+import { createStore } from 'redux';
+
+let store = null;
+
+afterEach(() => {
+  store = createStore(rootReducer, initialState);
+});
+
+function setup(value = 5, method = 'mount') {
+
+  initialState.breakLength = value;
+  store = createStore(rootReducer, initialState);
+
   const props = {
-    prop: 'breakLength',
-    value,
+    type: 'break',
     label: 'Break Length',
     labelId: 'break-label',
     decrementId: 'break-decrement',
     incrementId: 'break-increment',
     elemId: 'break-length',
-    incrementHandle: () => {},
-    decrementHandle: () => {},
-    updateAppState: jest.fn()
+    setLength: jest.fn(),
+    // changeHandle: jest.fn(),
+    store
   };
 
-  return mount(<LengthControl {...props}/>)
+  const set = (method === 'shallow') ? shallow : mount;
+
+  return set(<LengthControl {...props}/>);
 }
 
 describe('Length Control component', () => {
@@ -68,49 +83,26 @@ describe('Length Control component', () => {
     wrapper.find('#break-increment').simulate('click');
     expect(wrapper.find('.value').props().value).toBe(60);
   });
-  it('Passing in value changes state', () => {
-    const wrapper = setup(5);
-
-    expect(wrapper.state().value).toBe(5);
-
-    wrapper.setProps({ value: 10 });
-
-    expect(wrapper.state().value).toBe(10);
-  });
   it('changeHandle', () => {
-    const wrapper = setup();
-    wrapper.setState({
-      minValue: 1,
-      maxValue: 60
-    });
+    const wrapper = setup(5, 'shallow').dive();
 
     // test for allowed value
     const event = { target: { value: 7 } };
 
     wrapper.instance().changeHandle(event);
 
-    expect(wrapper.props().updateAppState.mock.calls.length).toBe(1);
-    expect(wrapper.props().updateAppState.mock.calls[0][1]).toBe(7);
-
-    expect(wrapper.state().value).toBe(7);
-    wrapper.props().updateAppState.mockClear();
+    expect(store.getState().breakLength).toBe(7);
 
     // test for min value
     const event2 = { target: { value: 0 } };
     wrapper.instance().changeHandle(event2);
 
-    expect(wrapper.props().updateAppState.mock.calls[0][1]).toBe(1);
-    expect(wrapper.state().value).toBe(1);
-
-    wrapper.props().updateAppState.mockClear();
+    expect(store.getState().breakLength).toBe(1);
 
     // test for max value
     const event3 = { target: { value: 100 } };
     wrapper.instance().changeHandle(event3);
 
-    expect(wrapper.props().updateAppState.mock.calls[0][1]).toBe(60);
-    expect(wrapper.state().value).toBe(60);
-
-    wrapper.props().updateAppState.mockClear();
+    expect(store.getState().breakLength).toBe(60);
   });
 });

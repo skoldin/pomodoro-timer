@@ -1,4 +1,7 @@
 function storageHelper() {
+  const setBool = (name, value) => {
+    return (value === true) ? 'true' : 'false';
+  };
   const getBool = (name) => {
     if (! sessionStorage.getItem(name)) {
       return false;
@@ -7,7 +10,7 @@ function storageHelper() {
     }
   };
 
-  return { getBool }
+  return { getBool, setBool }
 }
 
 export default storageHelper();
